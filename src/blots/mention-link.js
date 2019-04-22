@@ -1,9 +1,8 @@
 import Quill from 'quill';
 
-const Link = Quill.import('formats/link');
+const Inline = Quill.import('blots/inline');
 
-
-class MentionFormat extends Link {
+class MentionFormat extends Inline {
 
   static create(data) {
     const node = super.create();
@@ -12,14 +11,27 @@ class MentionFormat extends Link {
     return node;
   }
 
+  static formats(domNode) {
+    return domNode.getAttribute('href');
+  }
+
   static value(domNode) {
-    return domNode.dataset;
+    return domNode.getAttribute('href');
+  }
+
+  format(name, value) {
+    if (name !== this.statics.blotName || !value) {
+      super.format(name, value);
+    }
+    else {
+      this.domNode.setAttribute('href', value);
+    }
   }
 
 }
 
 MentionFormat.blotName = 'mention';
-MentionFormat.tagName = 'a';
+MentionFormat.tagName = 'A';
 MentionFormat.className = 'mention';
 
 Quill.register(MentionFormat);
