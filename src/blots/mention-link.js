@@ -1,33 +1,27 @@
 import Quill from 'quill';
 
-const Inline = Quill.import('blots/inline');
+const Image = Quill.import('formats/image');
 
-class MentionFormat extends Inline {
+class MentionFormat extends Image {
 
   static create(data) {
     const node = super.create();
-    node.setAttribute('href', data.href);
-    node.innerHTML = data.text;
+    node.setAttribute('href', this.sanitize(data.href));
+    node.innerText = data.text.trim();
     return node;
-  }
-
-  static formats(domNode) {
-    return domNode.getAttribute('href');
   }
 
   static value(domNode) {
     return domNode.getAttribute('href');
   }
 
-  format(name, value) {
-    if (name !== this.statics.blotName || !value) {
-      super.format(name, value);
-    }
-    else {
-      this.domNode.setAttribute('href', value);
-    }
+  static formats(domNode) {
+    return {};
   }
 
+  format(name, value) {
+    super.super.format(name, value);
+  }
 }
 
 MentionFormat.blotName = 'mention';
