@@ -7,7 +7,14 @@ class MentionFormat extends Image {
   static create(data) {
     const node = super.create();
     node.setAttribute('href', this.sanitize(data.href));
-    node.innerText = data.text.trim();
+    node.innerText = data.text;
+    if (data.attributes) {
+      Object.keys(data.attributes).forEach((key) => {
+        if (key !== 'href' && key !== 'text') {
+          node.setAttribute(key, data.attributes[key]);
+        }
+      });
+    }
     return node;
   }
 
